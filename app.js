@@ -8,7 +8,7 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 
 //fetch all todos
-app.get('/', (req, res, next) => {
+app.get('/', (req, res) => {
   const todos = [];
   Todo.findAll()
     .then(todos => {
@@ -20,6 +20,17 @@ app.get('/', (req, res, next) => {
     })
     .catch(() => {
       console.log('no todos found ');
+    });
+});
+
+app.post('/add', (req, res) => {
+  const todo = req.body;
+  Todo.create({ title: todo.title, description: todo.description })
+    .then(() => {
+      res.status(201).json({ message: 'added successfully' });
+    })
+    .catch(() => {
+      console.log('error');
     });
 });
 
